@@ -47,5 +47,5 @@ final class ThreadQAUITests: XCTestCase {
         var b = 10
         var result = a + b
         XCTAssertEqual(result, 15)
-    }git init
+    }
 }
