@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scheme
+   LastUpgradeVersion = "1500"
+   version = "1.7">
+   <BuildAction
+      parallelizeBuildables = "YES"
+      buildImplicitDependencies = "YES">
+      <BuildActionEntries>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "4B3715F42AE64FE6004812E8"
+               BuildableName = "ThreadQA.app"
+               BlueprintName = "ThreadQA"
+               ReferencedContainer = "container:ThreadQA.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+      </BuildActionEntries>
+   </BuildAction>
+   <TestAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      shouldAutocreateTestPlan = "YES">
+      <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "4B78B5542AECE5B3004DEF64"
+               BuildableName = "ThreadQAUITests.xctest"
+               BlueprintName = "ThreadQAUITests"
+               ReferencedContainer = "container:ThreadQA.xcodeproj">
+            </BuildableReference>
+            <SelectedTests>
+               <Test
+                  Identifier = "ThreadQAUITests/testInvalidLoginCredentials()">
+               </Test>
+               <Test
+                  Identifier = "ThreadQAUITests/testInvalidRegisterEmptyOneOfFields()">
+               </Test>
+               <Test
+                  Identifier = "ThreadQAUITests/testInvalidRegisterWrongEmail()">
+               </Test>
+               <Test
+                  Identifier = "ThreadQAUITests/testValidLoginCredentials()">
+               </Test>
+               <Test
+                  Identifier = "ThreadQAUITests/testValidRegister()">
+               </Test>
+               <Test
+                  Identifier = "UserTests/testAddNewUser()">
+               </Test>
+               <Test
+                  Identifier = "UserTests/testLogOut()">
+               </Test>
+               <Test
+                  Identifier = "UserTests/testMyProfileInfo()">
+               </Test>
+               <Test
+                  Identifier = "UserTests/testOpenRandomUser()">
+               </Test>
+            </SelectedTests>
+         </TestableReference>
+      </Testables>
+   </TestAction>
+   <LaunchAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      launchStyle = "0"
+      useCustomWorkingDirectory = "NO"
+      ignoresPersistentStateOnLaunch = "NO"
+      debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
+      allowLocationSimulation = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "4B3715F42AE64FE6004812E8"
+            BuildableName = "ThreadQA.app"
+            BlueprintName = "ThreadQA"
+            ReferencedContainer = "container:ThreadQA.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "FB_REFERENCE_IMAGE_DIR"
+            value = "$(SOURCE_ROOT)/Snapshots/ReferenceImages"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "IMAGE_DIFF_DIR"
+            value = "$(SOURCE_ROOT)/Snapshots/FailureDiffs"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "FAILED_UI_TEST_DIR"
+            value = "$(SOURCE_ROOT)/Snapshots/FailureScreenshots"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
+   </LaunchAction>
+   <ProfileAction
+      buildConfiguration = "Release"
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      savedToolIdentifier = ""
+      useCustomWorkingDirectory = "NO"
+      debugDocumentVersioning = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "4B3715F42AE64FE6004812E8"
+            BuildableName = "ThreadQA.app"
+            BlueprintName = "ThreadQA"
+            ReferencedContainer = "container:ThreadQA.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+   </ProfileAction>
+   <AnalyzeAction
+      buildConfiguration = "Debug">
+   </AnalyzeAction>
+   <ArchiveAction
+      buildConfiguration = "Release"
+      revealArchiveInOrganizer = "YES">
+   </ArchiveAction>
+</Scheme>
