@@ -11,7 +11,7 @@ final class ThreadQAUITests: XCTestCase {
 
     // Simple/dummy UI test example
     @MainActor
-    func testSumOfTwoNumbers() {
+    func testLoginBtnErrorMessageAssertion() {
         let app = XCUIApplication()
         app.launch()
         
