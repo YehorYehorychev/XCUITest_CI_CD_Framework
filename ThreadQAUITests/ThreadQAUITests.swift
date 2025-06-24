@@ -11,16 +11,34 @@ final class ThreadQAUITests: XCTestCase {
 
     // Simple/dummy UI test example
     @MainActor
-    func testSumOfTwoNumbers() {
+    func testLoginBtnErrorMessageAssertion() {
+        let app = XCUIApplication()
+        app.launch()
+
+        app.buttons["loginBtn"].tap()
+
+        let expectedErrorText = "Email and password should not be empty"
+        let errorMessageElement = app.staticTexts[expectedErrorText]
+
+        XCTAssertTrue(errorMessageElement.exists, "Error message is not shown")
+        XCTAssertEqual(errorMessageElement.label, expectedErrorText)
+    }
+
+    func testSuccessfulAuthorization() {
         let app = XCUIApplication()
         app.launch()
         
-        app.buttons["loginBtn"].tap()
+        // Test data
+        var email = "eve.holt@reqres.in"
+        var password = "cityslicka"
         
-        let expectedErrorText = "Email and password should not be empty"
-        let errorMessageElement = app.staticTexts[expectedErrorText]
+        // Locators
+        let emailField = app.textFields["emailField"]
+        let passwordField = app.textFields["passField"]
+        let loginBtn = app.buttons["loginBtn"]
         
-        XCTAssertTrue(errorMessageElement.exists, "Error message is not shown")
-        XCTAssertEqual(errorMessageElement.label, expectedErrorText)
+        emailField.typeText(email)
+        passwordField.typeText(password)
+        loginBtn.tap()
     }
 }
