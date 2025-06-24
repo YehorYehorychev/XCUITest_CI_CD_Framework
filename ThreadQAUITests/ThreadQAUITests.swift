@@ -29,16 +29,31 @@ final class ThreadQAUITests: XCTestCase {
         app.launch()
         
         // Test data
-        var email = "eve.holt@reqres.in"
-        var password = "cityslicka"
-        
-        // Locators
+        let email = "eve.holt@reqres.in"
+        let password = "cityslicka"
+
+        // Locators -> Login page
         let emailField = app.textFields["emailField"]
         let passwordField = app.textFields["passField"]
         let loginBtn = app.buttons["loginBtn"]
-        
+
+        // Actions
+        emailField.tap()
         emailField.typeText(email)
+
+        passwordField.tap()
         passwordField.typeText(password)
+
         loginBtn.tap()
+        
+        // Locators -> Main page
+        let brainBtn = app.buttons["Profile"]
+        
+        XCTAssertTrue(brainBtn.waitForExistence(timeout: 5.0), "Profile button didn't appear")
+        
+        // Locators -> Main page
+        let profilePhotosCount = app.images.count
+        
+        XCTAssertEqual(6, profilePhotosCount)
     }
 }
