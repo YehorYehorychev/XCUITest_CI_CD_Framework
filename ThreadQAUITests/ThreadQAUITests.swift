@@ -37,7 +37,6 @@ final class ThreadQAUITests: XCTestCase {
         let passwordField = app.textFields["passField"]
         let loginBtn = app.buttons["loginBtn"]
 
-        // Actions
         emailField.tap()
         emailField.typeText(email)
 
@@ -55,5 +54,33 @@ final class ThreadQAUITests: XCTestCase {
         let profilePhotosCount = app.images.count
         
         XCTAssertEqual(6, profilePhotosCount)
+    }
+    
+    func testUnsuccessfulAuthorization() {
+        let app = XCUIApplication()
+        app.launch()
+        
+        // Test data
+        let wrongEmail = "test@mail.com"
+        let wrongPassword = "test4u"
+
+        // Locators -> Login page
+        let emailField = app.textFields["emailField"]
+        let passwordField = app.textFields["passField"]
+        let loginBtn = app.buttons["loginBtn"]
+        
+        emailField.tap()
+        emailField.typeText(wrongEmail)
+        
+        passwordField.tap()
+        passwordField.typeText(wrongPassword)
+        
+        loginBtn.tap()
+        
+        let alertWindow = app.alerts["Try Again"]
+        XCTAssertTrue(alertWindow.waitForExistence(timeout: 5.0), "Alert didn't appear")
+        
+        let isInvalidCredsAlertExist = app.alerts.staticTexts["Invalid credentials"].exists
+        XCTAssertTrue(isInvalidCredsAlertExist)
     }
 }
