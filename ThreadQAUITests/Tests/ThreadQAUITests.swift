@@ -51,4 +51,21 @@ final class ThreadQAUITests: XCTestCase {
 
         XCTAssertTrue(alertIsShown,"‘Invalid credentials’ alert should be displayed")
     }
+    
+    func testSuccessfulRegister() {
+        app.launch()
+        
+        // Test data
+        let firstName = "Yehor"
+        let lastName = "Yehorychev"
+        let email = "test@test.com"
+        let pass = "testpass123"
+        
+        var user = UserReg(firstName: firstName, lastName: lastName, email: email, password: pass)
+        let registerScreen = loginScreen.goToRegisterPage()
+        
+        registerScreen.setSubSwitcher(state: true)
+        registerScreen.fillTheFields(userModel: user)
+        registerScreen.clickOnRegister()
+    }
 }
