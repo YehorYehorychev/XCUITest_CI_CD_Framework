@@ -12,7 +12,6 @@ final class ThreadQAUITests: XCTestCase {
     // Simple/dummy UI test example
     @MainActor
     func testLoginBtnErrorMessageAssertion() {
-        let app = XCUIApplication()
         app.launch()
 
         app.buttons["loginBtn"].tap()
@@ -25,7 +24,6 @@ final class ThreadQAUITests: XCTestCase {
     }
 
     func testSuccessfulAuthorization() {
-        let app = XCUIApplication()
         app.launch()
         
         // Test data
@@ -57,7 +55,6 @@ final class ThreadQAUITests: XCTestCase {
     }
     
     func testUnsuccessfulAuthorization() {
-        let app = XCUIApplication()
         app.launch()
         
         // Test data
