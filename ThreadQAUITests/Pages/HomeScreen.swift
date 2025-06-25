@@ -9,5 +9,10 @@ import Foundation
 import XCTest
 
 public class HomeScreen {
+    lazy var brainBtn = app.buttons["Profile"]
     
+    func getImagesCound() -> Int {
+        waitForElement(element: brainBtn)
+        return app.images.count
+    }
 }

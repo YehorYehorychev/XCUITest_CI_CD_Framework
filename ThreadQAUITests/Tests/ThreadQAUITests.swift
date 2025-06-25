@@ -8,6 +8,7 @@
 import XCTest
 
 final class ThreadQAUITests: XCTestCase {
+    private var loginScreen = LoginScreen()
 
     // Simple/dummy UI test example
     @MainActor
@@ -30,28 +31,11 @@ final class ThreadQAUITests: XCTestCase {
         let email = "eve.holt@reqres.in"
         let password = "cityslicka"
 
-        // Locators -> Login page
-        let emailField = app.textFields["emailField"]
-        let passwordField = app.textFields["passField"]
-        let loginBtn = app.buttons["loginBtn"]
-
-        emailField.tap()
-        emailField.typeText(email)
-
-        passwordField.tap()
-        passwordField.typeText(password)
-
-        loginBtn.tap()
+        let imagesCount = loginScreen
+            .auth(email: email, pass: password)
+            .getImagesCound()
         
-        // Locators -> Main page
-        let brainBtn = app.buttons["Profile"]
-        
-        XCTAssertTrue(brainBtn.waitForExistence(timeout: 5.0), "Profile button didn't appear")
-        
-        // Locators -> Main page
-        let profilePhotosCount = app.images.count
-        
-        XCTAssertEqual(6, profilePhotosCount)
+        XCTAssertEqual(6, imagesCount)
     }
     
     func testUnsuccessfulAuthorization() {
@@ -60,24 +44,11 @@ final class ThreadQAUITests: XCTestCase {
         // Test data
         let wrongEmail = "test@mail.com"
         let wrongPassword = "test4u"
+        
+        let alertIsShown = loginScreen
+            .invalidAuth(email: wrongEmail, pass: wrongPassword)
+            .isWrongCredsAlertExists()
 
-        // Locators -> Login page
-        let emailField = app.textFields["emailField"]
-        let passwordField = app.textFields["passField"]
-        let loginBtn = app.buttons["loginBtn"]
-        
-        emailField.tap()
-        emailField.typeText(wrongEmail)
-        
-        passwordField.tap()
-        passwordField.typeText(wrongPassword)
-        
-        loginBtn.tap()
-        
-        let alertWindow = app.alerts["Try Again"]
-        XCTAssertTrue(alertWindow.waitForExistence(timeout: 5.0), "Alert didn't appear")
-        
-        let isInvalidCredsAlertExist = app.alerts.staticTexts["Invalid credentials"].exists
-        XCTAssertTrue(isInvalidCredsAlertExist)
+        XCTAssertTrue(alertIsShown,"‘Invalid credentials’ alert should be displayed")
     }
 }
