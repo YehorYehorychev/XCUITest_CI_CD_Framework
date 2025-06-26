@@ -9,6 +9,7 @@ import Foundation
 import XCTest
 
 public class RegisterScreen {
+    
     lazy var firstNameField = app.textFields["firstNameField"]
     lazy var lastNameField = app.textFields["lastNameField"]
     lazy var emailField = app.textFields["emailField"]
