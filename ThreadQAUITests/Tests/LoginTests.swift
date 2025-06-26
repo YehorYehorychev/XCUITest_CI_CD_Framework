@@ -7,7 +7,7 @@
 
 import XCTest
 
-final class ThreadQAUITests: XCTestCase {
+final class LoginTests: XCTestCase {
     private var loginScreen = LoginScreen()
     
     override func setUp() {
