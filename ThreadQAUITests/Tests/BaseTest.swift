@@ -11,6 +11,7 @@ import XCTest
 // BaseTest it's not a class, it's just a SwiftFile,
 // that contains a global XCUIApplication variable
 let app = XCUIApplication()
+let appHelper = AppHelper()
 
 func waitForElement(element: XCUIElement) -> XCUIElement {
     if !element.waitForExistence(timeout: 8) {
