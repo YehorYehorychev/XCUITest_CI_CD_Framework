@@ -22,4 +22,23 @@ final class UserTests: XCTestCase {
 
         homeScreen = loginScreen.auth(email: email, pass: password)
     }
+    
+    func testUserInfo() {
+        let profileScreen = homeScreen.openProfile()
+        
+        let userEmail = profileScreen.getEmail()
+        let userFirstName = profileScreen.getName()
+        let userLastName = profileScreen.getLastName()
+        let userHasImage = profileScreen.isImageExist()
+        
+        XCTAssertEqual(userEmail, "janet.weaver@reqres.in")
+        XCTAssertEqual(userFirstName, "Janet")
+        XCTAssertEqual(userLastName, "Weaver")
+        XCTAssertTrue(userHasImage)
+    }
+    
+    func testLogOut() {
+        let isLoggedOut = homeScreen.logOut().isLoginScreen()
+        XCTAssertTrue(isLoggedOut)
+    }
 }

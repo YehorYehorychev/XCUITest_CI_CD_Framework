@@ -28,7 +28,7 @@ public class ProfileScreen {
         return emailText.label
     }
     
-    func getLastName() -> Bool {
+    func isImageExist() -> Bool {
         return profileImage.exists
     }
     
