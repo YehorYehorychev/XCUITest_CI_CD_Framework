@@ -9,12 +9,21 @@ import XCTest
 
 final class ThreadQAUITests: XCTestCase {
     private var loginScreen = LoginScreen()
+    
+    override func setUp() {
+        super.setUp()
+        continueAfterFailure = false
+        app.launch()
+    }
+    
+    override func tearDown() {
+        super.tearDown()
+        app.terminate()
+    }
 
-    // Simple/dummy UI test example
+    // Simple/dummy UI test example (no POM)
     @MainActor
     func testLoginBtnErrorMessageAssertion() {
-        app.launch()
-
         app.buttons["loginBtn"].tap()
 
         let expectedErrorText = "Email and password should not be empty"
@@ -25,8 +34,6 @@ final class ThreadQAUITests: XCTestCase {
     }
 
     func testSuccessfulAuthorization() {
-        app.launch()
-        
         // Test data
         let email = "eve.holt@reqres.in"
         let password = "cityslicka"
@@ -39,11 +46,9 @@ final class ThreadQAUITests: XCTestCase {
     }
     
     func testUnsuccessfulAuthorization() {
-        app.launch()
-        
         // Test data
-        let wrongEmail = "test@mail.com"
-        let wrongPassword = "test4u"
+        let wrongEmail = appHelper.randomString(length: 10)
+        let wrongPassword = appHelper.randomString(length: 15)
         
         let alertIsShown = loginScreen
             .invalidAuth(email: wrongEmail, pass: wrongPassword)
@@ -53,19 +58,21 @@ final class ThreadQAUITests: XCTestCase {
     }
     
     func testSuccessfulRegister() {
-        app.launch()
-        
         // Test data
         let firstName = "Yehor"
         let lastName = "Yehorychev"
         let email = "test@test.com"
         let pass = "testpass123"
         
-        var user = UserReg(firstName: firstName, lastName: lastName, email: email, password: pass)
+        let user = UserReg(firstName: firstName, lastName: lastName, email: email, password: pass)
         let registerScreen = loginScreen.goToRegisterPage()
         
         registerScreen.setSubSwitcher(state: true)
         registerScreen.fillTheFields(userModel: user)
         registerScreen.clickOnRegister()
+        appHelper.waitForAlertAndText(text: "Welcome!")
+        
+        let hasAlertDescription = appHelper.hasAlertDescription(text: "You are now registered")
+        XCTAssertTrue(hasAlertDescription)
     }
 }
