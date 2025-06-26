@@ -19,4 +19,17 @@ class AppHelper {
     func randomInt(min: Int, max: Int) -> Int {
         return min + Int(arc4random_uniform(UInt32(max - min + 1)))
     }
+    
+    func waitForAlertAndText(text: String) {
+        let alert = app.alerts[text]
+        waitForElement(element: alert)
+    }
+    
+    func hasAlertDescription(text: String) -> Bool {
+        return app.alerts.staticTexts[text].exists
+    }
+    
+    func hideApp() {
+        XCUIDevice.shared.press(XCUIDevice.Button.home)
+    }
 }
