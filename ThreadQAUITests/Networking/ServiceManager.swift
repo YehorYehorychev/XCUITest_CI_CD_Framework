@@ -33,4 +33,21 @@ extension ServiceManager {
         semaphor.wait()
         return decodedData!
     }
+    
+    func getRequestAsString(resource: URL) -> String {
+        var request = URLRequest(url: resource)
+        request.httpMethod = "GET"
+        
+        var decodedData = ""
+        let semaphor = DispatchSemaphore(value: 0)
+        
+        let session = URLSession.shared
+        session.dataTask(with: request) {
+            (data, response, err) in
+            decodedData = String(data: data!, encoding: .utf8)!
+            semaphor.signal()
+        }.resume()
+        semaphor.wait()
+        return decodedData
+    }
 }
