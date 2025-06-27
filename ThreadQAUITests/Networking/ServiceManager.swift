@@ -20,16 +20,17 @@ extension ServiceManager {
     func getRequest<T:Decodable>(resource: URL, decodeType: T.Type) -> T {
         var request = URLRequest(url: resource)
         request.httpMethod = "GET"
+        request.addValue("reqres-free-v1", forHTTPHeaderField: "x-api-key")
         
         var decodedData: T? = nil
         let semaphor = DispatchSemaphore(value: 0)
         
         let session = URLSession.shared
-        session.dataTask(with: request) {
-            (data, response, err) in
+        session.dataTask(with: request) { (data, response, err) in
             decodedData = try! JSONDecoder().decode(T.self, from: data!)
             semaphor.signal()
         }.resume()
+        
         semaphor.wait()
         return decodedData!
     }
@@ -37,16 +38,17 @@ extension ServiceManager {
     func getRequestAsString(resource: URL) -> String {
         var request = URLRequest(url: resource)
         request.httpMethod = "GET"
+        request.addValue("reqres-free-v1", forHTTPHeaderField: "x-api-key")
         
         var decodedData = ""
         let semaphor = DispatchSemaphore(value: 0)
         
         let session = URLSession.shared
-        session.dataTask(with: request) {
-            (data, response, err) in
+        session.dataTask(with: request) { (data, response, err) in
             decodedData = String(data: data!, encoding: .utf8)!
             semaphor.signal()
         }.resume()
+        
         semaphor.wait()
         return decodedData
     }
