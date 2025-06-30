@@ -1,0 +1,14 @@
+/Users/yehor/Downloads/ThreadQaApp/ThreadQAUITests/Extensions/XCUIElement.swift
+/Users/yehor/Downloads/ThreadQaApp/ThreadQAUITests/Helpers/AppHelper.swift
+/Users/yehor/Downloads/ThreadQaApp/ThreadQAUITests/Models/UserReg.swift
+/Users/yehor/Downloads/ThreadQaApp/ThreadQAUITests/Models/UserReqres.swift
+/Users/yehor/Downloads/ThreadQaApp/ThreadQAUITests/Networking/ServiceManager.swift
+/Users/yehor/Downloads/ThreadQaApp/ThreadQAUITests/Pages/HomeScreen.swift
+/Users/yehor/Downloads/ThreadQaApp/ThreadQAUITests/Pages/LoginScreen.swift
+/Users/yehor/Downloads/ThreadQaApp/ThreadQAUITests/Pages/NewUserScreen.swift
+/Users/yehor/Downloads/ThreadQaApp/ThreadQAUITests/Pages/ProfileScreen.swift
+/Users/yehor/Downloads/ThreadQaApp/ThreadQAUITests/Pages/RegisterScreen.swift
+/Users/yehor/Downloads/ThreadQaApp/ThreadQAUITests/Pages/UserDetailScreen.swift
+/Users/yehor/Downloads/ThreadQaApp/ThreadQAUITests/Tests/BaseTest.swift
+/Users/yehor/Downloads/ThreadQaApp/ThreadQAUITests/Tests/LoginTests.swift
+/Users/yehor/Downloads/ThreadQaApp/ThreadQAUITests/Tests/UserTests.swift
