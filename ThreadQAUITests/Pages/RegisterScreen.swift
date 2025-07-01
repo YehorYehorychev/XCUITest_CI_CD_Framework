@@ -38,8 +38,8 @@ public class RegisterScreen {
         lastNameField.tapAndType(text: userModel.lastName)
         emailField.tapAndType(text: userModel.email)
         passField.tapAndType(text: userModel.password)
-        passField.closeKeyboardIfExist()
-//        keyboardReturnBtn.tap()87
+        passField.closeKeyboardIfExists()
+//        keyboardReturnBtn.tap()
     }
     
     func clickOnRegister() {

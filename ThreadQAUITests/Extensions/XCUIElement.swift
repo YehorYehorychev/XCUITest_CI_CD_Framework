@@ -15,9 +15,15 @@ extension XCUIElement {
         self.typeText(text)
     }
     
-    func closeKeyboardIfExist() {
-        if app.keyboards.element(boundBy: 0).exists {
-            app.typeText("/n")
+    func closeKeyboardIfExists() {
+        let keyboard = app.keyboards.element(boundBy: 0)
+        if keyboard.exists {
+            let returnButton = app.buttons["Return"]
+            if returnButton.exists {
+                returnButton.tap()
+            } else {
+                app.tap()
+            }
         }
     }
 }

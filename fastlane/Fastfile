@@ -6,6 +6,6 @@ lane :test do |options|
     result_bundle: true,
     number_of_retries: 2,
     testplan: "MyPlan",
-    only_testing: "ThreadQAUITests/LoginTests/testSuccessfulRegister, ThreadQAUITests/UserTests/testOpenRandomUser"
+    only_testing: "ThreadQAUITests/LoginTests/testSuccessfulRegister,ThreadQAUITests/UserTests/testOpenRandomUser"
   )
 end
