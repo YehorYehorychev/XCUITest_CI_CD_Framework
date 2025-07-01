@@ -5,6 +5,7 @@ lane :test do |options|
     output_types: "junit,json-compilation-database",
     result_bundle: true,
     number_of_retries: 2,
-    testplan: "MyPlan"
+    testplan: "MyPlan",
+    only_testing: "ThreadQAUITests/LoginTests/testSuccessfulRegister, ThreadQAUITests/UserTests/testOpenRandomUser"
   )
 end
