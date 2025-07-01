@@ -24,6 +24,20 @@ final class UserTests: XCTestCase {
         homeScreen = loginScreen.auth(email: email, pass: password)
     }
     
+    override func tearDown() {
+        super.tearDown()
+        takeScreenshot()
+        app.terminate()
+    }
+    
+    func takeScreenshot(name screenshotName: String? = nil) {
+        let screenshot = XCUIScreen.main.screenshot()
+        let attachment = XCTAttachment(screenshot: screenshot, quality: .original)
+        attachment.name = screenshotName ?? name + "_" + UUID().uuidString
+        attachment.lifetime = .keepAlways
+        add(attachment)
+    }
+    
     func testUserInfo() {
         let profileScreen = homeScreen.openProfile()
         

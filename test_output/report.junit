@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites name='ThreadQAUITests.xctest' tests='6' failures='3'>
+  <testsuite name='ThreadQAUITests.LoginTests' tests='4' failures='3'>
+    <testcase classname='ThreadQAUITests.LoginTests' name='testSuccessfulAuthorization'>
+      <failure message='XCTAssertEqual failed: (&amp;quot;6&amp;quot;) is not equal to (&amp;quot;0&amp;quot;)'>ThreadQAUITests/Tests/LoginTests.swift:54</failure>
+    </testcase>
+    <testcase classname='ThreadQAUITests.LoginTests' name='testSuccessfulAuthorization'>
+      <failure message='XCTAssertEqual failed: (&amp;quot;6&amp;quot;) is not equal to (&amp;quot;0&amp;quot;)'>ThreadQAUITests/Tests/LoginTests.swift:54</failure>
+    </testcase>
+    <testcase classname='ThreadQAUITests.LoginTests' name='testSuccessfulAuthorization'>
+      <failure message='XCTAssertEqual failed: (&amp;quot;6&amp;quot;) is not equal to (&amp;quot;0&amp;quot;)'>ThreadQAUITests/Tests/LoginTests.swift:54</failure>
+    </testcase>
+    <testcase classname='ThreadQAUITests.LoginTests' name='testUnsuccessfulAuthorization' time='6.526'/>
+  </testsuite>
+  <testsuite name='ThreadQAUITests.UserTests' tests='2' failures='0'>
+    <testcase classname='ThreadQAUITests.UserTests' name='testLogOut' time='7.196'/>
+    <testcase classname='ThreadQAUITests.UserTests' name='testUserInfo' time='7.768'/>
+  </testsuite>
+</testsuites>

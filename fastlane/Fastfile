@@ -1,0 +1,10 @@
+lane :test do |options|
+  scan(
+    devices: options[:id],
+    output_directory: options[:test_output],
+    output_types: "junit,json-compilation-database",
+    result_bundle: true,
+    number_of_retries: 2,
+    testplan: "MyPlan"
+  )
+end
