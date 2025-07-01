@@ -14,4 +14,10 @@ extension XCUIElement {
         self.tap()
         self.typeText(text)
     }
+    
+    func closeKeyboardIfExist() {
+        if app.keyboards.element(boundBy: 0).exists {
+            app.typeText("/n")
+        }
+    }
 }
