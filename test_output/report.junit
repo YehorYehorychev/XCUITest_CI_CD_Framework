@@ -1,9 +1,19 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<testsuites name='ThreadQAUITests.xctest' tests='2' failures='0'>
-  <testsuite name='ThreadQAUITests.LoginTests' tests='1' failures='0'>
-    <testcase classname='ThreadQAUITests.LoginTests' name='testSuccessfulRegister' time='9.724'/>
+<testsuites name='ThreadQAUITests.xctest' tests='6' failures='3'>
+  <testsuite name='ThreadQAUITests.LoginTests' tests='2' failures='0'>
+    <testcase classname='ThreadQAUITests.LoginTests' name='testLoginBtnErrorMessageAssertion' time='3.640'/>
+    <testcase classname='ThreadQAUITests.LoginTests' name='testUnsuccessfulAuthorization' time='6.856'/>
   </testsuite>
-  <testsuite name='ThreadQAUITests.UserTests' tests='1' failures='0'>
-    <testcase classname='ThreadQAUITests.UserTests' name='testOpenRandomUser' time='9.819'/>
+  <testsuite name='ThreadQAUITests.UserTests' tests='4' failures='3'>
+    <testcase classname='ThreadQAUITests.UserTests' name='testAddNewUser' time='19.142'/>
+    <testcase classname='ThreadQAUITests.UserTests' name='testUserInfo'>
+      <failure message='XCTAssertEqual failed: (&amp;quot;cr@gmail.com&amp;quot;) is not equal to (&amp;quot;janet.weaver@reqres.in&amp;quot;)'>ThreadQAUITests/Tests/UserTests.swift:49</failure>
+    </testcase>
+    <testcase classname='ThreadQAUITests.UserTests' name='testUserInfo'>
+      <failure message='XCTAssertEqual failed: (&amp;quot;cr@gmail.com&amp;quot;) is not equal to (&amp;quot;janet.weaver@reqres.in&amp;quot;)'>ThreadQAUITests/Tests/UserTests.swift:49</failure>
+    </testcase>
+    <testcase classname='ThreadQAUITests.UserTests' name='testUserInfo'>
+      <failure message='XCTAssertEqual failed: (&amp;quot;cr@gmail.com&amp;quot;) is not equal to (&amp;quot;janet.weaver@reqres.in&amp;quot;)'>ThreadQAUITests/Tests/UserTests.swift:49</failure>
+    </testcase>
   </testsuite>
 </testsuites>
