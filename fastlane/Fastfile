@@ -1,3 +1,5 @@
+fastlane_require 'json'
+
 lane :test do |options|
   scan(
     devices: options[:id],
@@ -5,6 +7,14 @@ lane :test do |options|
     output_types: "junit,json-compilation-database",
     result_bundle: true,
     number_of_retries: 2,
-    testplan: "MyPlan"
+    testplan: "MyPlan",
+    only_testing: test_plan(test_list: options[:test_list]).map(&:to_s)
   )
+end
+
+def test_plan(test_list:)
+  test_list = JSON.parse(File.read(test_list)).keys
+  Process.exit(0) if test_list.empty?
+  puts test_list
+  test_list
 end

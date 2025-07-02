@@ -38,7 +38,7 @@ public class RegisterScreen {
         lastNameField.tapAndType(text: userModel.lastName)
         emailField.tapAndType(text: userModel.email)
         passField.tapAndType(text: userModel.password)
-        passField.closeKeyboardIfExist()
+        passField.closeKeyboardIfExists()
 //        keyboardReturnBtn.tap()
     }
     

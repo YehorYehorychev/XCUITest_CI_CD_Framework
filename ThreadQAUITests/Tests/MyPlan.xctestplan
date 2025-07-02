@@ -13,12 +13,6 @@
   },
   "testTargets" : [
     {
-      "skippedTests" : [
-        "LoginTests\/testLoginBtnErrorMessageAssertion()",
-        "LoginTests\/testSuccessfulRegister()",
-        "UserTests\/testAddNewUser()",
-        "UserTests\/testOpenRandomUser()"
-      ],
       "target" : {
         "containerPath" : "container:ThreadQA.xcodeproj",
         "identifier" : "922729BF2E0626A0009C6E31",
