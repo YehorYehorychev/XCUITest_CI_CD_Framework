@@ -2,6 +2,9 @@ fastlane_require 'json'
 
 lane :test do |options|
   scan(
+    workspace: "./ThreadQA.xcworkspace",
+    derived_data_path: "./DerivedData",
+    test_without_building: true,
     devices: options[:id],
     output_directory: options[:test_output],
     output_types: "junit,json-compilation-database",
