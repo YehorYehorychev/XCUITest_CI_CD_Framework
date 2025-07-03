@@ -45,12 +45,12 @@ ThreadQA/
 ```
 
 ## 🚀 Features
-✅ Parallel test distribution with a Python orchestrator
-✅ Modular Page Object Model architecture
-✅ Test execution managed by Fastlane
-✅ Support for Xcode Testplans
-✅ Allure reporting integration
-✅ JSON-based test splitting across multiple devices
+- ✅ Parallel test distribution with a Python orchestrator
+- ✅ Modular Page Object Model architecture
+- ✅ Test execution managed by Fastlane
+- ✅ Support for Xcode Testplans
+- ✅ Allure reporting integration
+- ✅ JSON-based test splitting across multiple devices
 
 ## 🔧 Prerequisites
 Install dependencies via Homebrew and npm:
@@ -66,13 +66,10 @@ Also install the plugin for Allure conversion:
 ## ⚙️ Test Orchestrator
 ThreadQA includes a Python-based orchestrator.py script to:
 
-scan all Swift test files under `ThreadQAUITests/Tests`
-
-parse test class/method names
-
-generate a JSON list of tests
-
-distribute them between devices for parallel execution
+- Scan all Swift test files under `ThreadQAUITests/Tests`
+- Parse test class/method names
+- Generate a JSON list of tests
+- Distribute them between devices for parallel execution
 
 For example:
 `python3 orchestrator.py --devices "iPhone 16 Pro Max,iPhone 14"`
@@ -84,7 +81,7 @@ This will generate JSON test lists like:
 - iPhone 14-tests.json
 
 ## 🏃 Running Tests with Fastlane
-ThreadQA uses a Fastlane lane described in its Fastfile:
+Framework uses a Fastlane lane described in its Fastfile:
 
 ```
 lane :test do |options|
