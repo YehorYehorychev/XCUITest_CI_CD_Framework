@@ -12,6 +12,15 @@ lane :test do |options|
   )
 end
 
+lane :build do
+  scan(
+    workspace: "./ThreadQA.xcworkspace",
+    skip_build: false,
+    derived_data_path: "./DerivedData",
+    build_for_testing: true
+  )
+end
+
 def test_plan(test_list:)
   test_list = JSON.parse(File.read(test_list)).keys
   Process.exit(0) if test_list.empty?
