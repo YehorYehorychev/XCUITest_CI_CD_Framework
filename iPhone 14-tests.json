@@ -1,6 +1,0 @@
-{
-    "ThreadQAUITests/UserTests/testLogOut": "0",
-    "ThreadQAUITests/UserTests/testOpenRandomUser": "0",
-    "ThreadQAUITests/LoginTests/testSuccessfulAuthorization": "0",
-    "ThreadQAUITests/LoginTests/testSuccessfulRegister": "0"
-}

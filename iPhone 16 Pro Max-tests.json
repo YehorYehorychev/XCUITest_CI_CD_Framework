@@ -1,6 +1,0 @@
-{
-    "ThreadQAUITests/UserTests/testUserInfo": "0",
-    "ThreadQAUITests/UserTests/testAddNewUser": "0",
-    "ThreadQAUITests/LoginTests/testLoginBtnErrorMessageAssertion": "0",
-    "ThreadQAUITests/LoginTests/testUnsuccessfulAuthorization": "0"
-}

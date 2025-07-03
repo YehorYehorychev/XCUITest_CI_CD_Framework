@@ -1,4 +1,0 @@
-Target dependency graph (2 targets)
-Target 'ThreadQAUITests' in project 'ThreadQA'
-➜ Explicit dependency on target 'ThreadQA' in project 'ThreadQA'
-Target 'ThreadQA' in project 'ThreadQA' (no dependencies)
