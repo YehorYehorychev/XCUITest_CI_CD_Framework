@@ -54,13 +54,15 @@ ThreadQA/
 
 ## 🔧 Prerequisites
 Install dependencies via Homebrew and npm:
-- `brew install fastlane`
-- `brew install allure`
-- `npm install -g xcresults`
+```bash
+brew install fastlane
+brew install allure
+npm install -g xcresults
+```
 
 Also install the plugin for Allure conversion:
 
-- `eroshenkoam/xcresults-to-allure-json`
+- [xcresults-to-allure-json](https://github.com/eroshenkoam/xcresults) 
 - `brew install xcresults`
 
 ## ⚙️ Test Orchestrator
