@@ -133,8 +133,10 @@ Install Homebrew if missing:
 `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
 
 Install dependencies:
-- `brew install fastlane allure`
-- `npm install -g xcresults`
+```bash
+brew install fastlane allure
+npm install -g xcresults
+```
 
 Clone the repository:
 
