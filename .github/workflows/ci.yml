@@ -1,0 +1,113 @@
+name: iOS XCUITest CI
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+
+jobs:
+  prepare_tests:
+    name: Prepare Tests
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Prepare test distribution
+        run: |
+          python3 orchestrator.py --devices "iphoneFastlane16,iphoneFastlane15"
+          echo "iphoneFastlane16,iphoneFastlane15" | tr ',' '\n' > devices.txt
+          mv *-tests.json fastlane/
+
+      - name: Archive test definitions
+        uses: actions/upload-artifact@v4
+        with:
+          name: devices-and-testlists
+          path: |
+            devices.txt
+            fastlane/*.json
+
+  build_app:
+    name: Build App
+    runs-on: self-hosted
+    needs: prepare_tests
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Restore artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: devices-and-testlists
+
+      - name: Build app
+        run: |
+          fastlane build
+
+      - name: Archive DerivedData
+        uses: actions/upload-artifact@v4
+        with:
+          name: derived-data
+          path: |
+            DerivedData
+            fastlane/*.json
+            devices.txt
+
+  run_tests:
+    name: Run Tests on matrix devices
+    runs-on: self-hosted
+    needs: build_app
+    strategy:
+      matrix:
+        device: ["iphoneFastlane16", "iphoneFastlane15"]
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Restore build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: derived-data
+
+      - name: Run tests
+        run: |
+          TEST_FILE="fastlane/${{ matrix.device }}-tests.json"
+          if [ ! -f "$TEST_FILE" ]; then echo "Test file $TEST_FILE not found!"; exit 1; fi
+          fastlane test id:"${{ matrix.device }}" test_list:"$TEST_FILE" test_output:"output_dir/${{ matrix.device }}"
+
+      - name: Archive test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcresults-${{ matrix.device }}
+          path: |
+            output_dir/${{ matrix.device }}
+
+  generate_allure_report:
+    name: Generate Allure Report
+    runs-on: self-hosted
+    needs: run_tests
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Restore results
+        uses: actions/download-artifact@v4
+        with:
+          name: xcresults-iphoneFastlane16
+      - uses: actions/download-artifact@v4
+        with:
+          name: xcresults-iphoneFastlane15
+
+      - name: Merge results and generate Allure report
+        run: |
+          mkdir -p allure_union
+          find output_dir -mindepth 2 -type d -exec cp -r {} allure_union \;
+          allure generate allure_union -o allure-report --clean
+
+      - name: Upload Allure Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report
