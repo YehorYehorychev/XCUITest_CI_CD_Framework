@@ -17,8 +17,8 @@ jobs:
 
       - name: Prepare test distribution
         run: |
-          python3 orchestrator.py --devices "iphoneFastlane16,iphoneFastlane15"
-          echo "iphoneFastlane16,iphoneFastlane15" | tr ',' '\n' > devices.txt
+          python3 orchestrator.py --devices "iPhone 14,iPhone 16 Pro Max"
+          echo "iPhone 14,iPhone 16 Pro Max" | tr ',' '\n' > devices.txt
           mv *-tests.json fastlane/
 
       - name: Archive test definitions
@@ -61,7 +61,7 @@ jobs:
     needs: build_app
     strategy:
       matrix:
-        device: ["iphoneFastlane16", "iphoneFastlane15"]
+        device: ["iPhone 14", "iPhone 16 Pro Max"]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
