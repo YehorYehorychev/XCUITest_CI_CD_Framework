@@ -1,6 +1,6 @@
 # iOS XCUITEST Automation Framework
 
-Welcome to **ThreadQA**, a modular and scalable iOS UI test framework written in Swift with XCTest. It supports parallel execution, test splitting, and Allure reporting.
+Welcome to my **iOS XCUITEST Automation Framework**, a modular and scalable iOS UI test framework written in Swift with XCTest. It supports parallel execution, test splitting, and Allure reporting.
 
 ---
 
