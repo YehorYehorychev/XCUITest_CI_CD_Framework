@@ -136,7 +136,7 @@ Install dependencies:
 
 Clone the repository:
 
-`git clone https://github.com/YOUR_GITHUB/ThreadQA.git`
+```[git clone https://github.com/YOUR_GITHUB/ThreadQA.git](https://github.com/YehorYehorychev/XCUITest_CI_CD_Framework.git)```
 
 cd ThreadQA
 
