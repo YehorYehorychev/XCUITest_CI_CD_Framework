@@ -92,13 +92,15 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Restore results
+      - name: Restore results iPhone 14
         uses: actions/download-artifact@v4
         with:
-          name: xcresults-iphoneFastlane16
-      - uses: actions/download-artifact@v4
+          name: xcresults-iPhone 14
+
+      - name: Restore results iPhone 16 Pro Max
+        uses: actions/download-artifact@v4
         with:
-          name: xcresults-iphoneFastlane15
+          name: xcresults-iPhone 16 Pro Max
 
       - name: Merge results and generate Allure report
         run: |
