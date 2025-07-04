@@ -42,12 +42,6 @@ jobs:
         with:
           name: devices-and-testlists
 
-      # убираем mv, он лишний
-      # файлы уже внутри fastlane/*.json в артефакте
-      # - name: Move testlists to fastlane
-      #   run: |
-      #     mv devices-and-testlists/*.json fastlane/
-
       - name: Build app
         run: |
           fastlane build
@@ -58,8 +52,7 @@ jobs:
           name: derived-data
           path: |
             DerivedData
-            fastlane/*.json
-            devices.txt
+            devices-and-testlists/**
 
   run_tests:
     name: Run Tests on matrix devices
@@ -76,6 +69,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: derived-data
+
+      - name: Move testlists to fastlane
+        run: |
+          mv devices-and-testlists/fastlane/*.json fastlane/
 
       - name: Run tests
         run: |
