@@ -18,7 +18,7 @@ jobs:
       - name: Prepare test distribution
         run: |
           python3 orchestrator.py --devices "iphoneFastlane15,iphoneFastlane16"
-          echo "iPhone 15,iPhone 16" | tr ',' '\n' > devices.txt
+          echo "iphoneFastlane15,iphoneFastlane16" | tr ',' '\n' > devices.txt
           mv *-tests.json fastlane/
 
       - name: Archive test definitions
