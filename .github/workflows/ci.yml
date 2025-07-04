@@ -42,6 +42,10 @@ jobs:
         with:
           name: devices-and-testlists
 
+      - name: Move testlists to fastlane
+        run: |
+          mv devices-and-testlists/fastlane/*.json fastlane/
+
       - name: Build app
         run: |
           fastlane build
