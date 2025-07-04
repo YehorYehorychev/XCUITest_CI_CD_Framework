@@ -42,9 +42,11 @@ jobs:
         with:
           name: devices-and-testlists
 
-      - name: Move testlists to fastlane
-        run: |
-          mv devices-and-testlists/*.json fastlane/
+      # убираем mv, он лишний
+      # файлы уже внутри fastlane/*.json в артефакте
+      # - name: Move testlists to fastlane
+      #   run: |
+      #     mv devices-and-testlists/*.json fastlane/
 
       - name: Build app
         run: |
