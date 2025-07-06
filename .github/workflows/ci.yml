@@ -19,15 +19,15 @@ jobs:
         run: |
           python3 orchestrator.py --devices "iphoneFastlane15,iphoneFastlane16"
           echo "iphoneFastlane15,iphoneFastlane16" | tr ',' '\n' > devices.txt
-          mkdir -p devices-and-testlists/fastlane
-          mv *-tests.json devices-and-testlists/fastlane/
+          mv *-tests.json fastlane/
 
       - name: Archive test definitions
         uses: actions/upload-artifact@v4
         with:
           name: devices-and-testlists
           path: |
-            devices-and-testlists/**
+            devices.txt
+            fastlane/*.json
 
   build_app:
     name: Build App
@@ -70,9 +70,14 @@ jobs:
         with:
           name: derived-data
 
-      - name: Move testlists to fastlane
+      - name: Copy testlists to fastlane
         run: |
-          mv devices-and-testlists/fastlane/*.json fastlane/
+          mkdir -p fastlane
+          cp devices-and-testlists/fastlane/*.json fastlane/ || true
+
+      - name: List copied files
+        run: |
+          ls -la fastlane
 
       - name: Run tests
         run: |
