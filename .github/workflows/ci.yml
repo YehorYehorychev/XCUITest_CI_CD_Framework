@@ -4,136 +4,125 @@ on:
   push:
     branches:
       - main
-      - dev
-  pull_request:
 
 jobs:
-  prepare_tests:
-    name: Prepare Tests
-    runs-on: self-hosted
+  prepare-tests:
+    runs-on: macos-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Prepare test distribution
-        run: |
-          python3 orchestrator.py --devices "iphoneFastlane15,iphoneFastlane16"
-          echo "iphoneFastlane15,iphoneFastlane16" | tr ',' '\n' > devices.txt
-          mkdir -p testlists
-          mv *-tests.json testlists/
+      - name: Setup Ruby and Bundler
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
 
-      - name: Archive test definitions
+      - name: Install dependencies
+        run: |
+          gem install bundler
+          bundle install
+
+      - name: Archive Devices and Testlists (if exist)
+        run: |
+          echo "Archiving devices-and-testlists contents if they exist"
+          mkdir -p archive-testlists
+          if [ -d "devices-and-testlists" ]; then
+            cp -r devices-and-testlists archive-testlists/
+          else
+            echo "⚠️ WARNING: devices-and-testlists directory NOT FOUND"
+          fi
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: devices-and-testlists
-          path: |
-            devices.txt
-            testlists/*.json
+          name: testlists
+          path: archive-testlists/
 
-  build_app:
-    name: Build App
-    runs-on: self-hosted
-    needs: prepare_tests
+  build-app:
+    runs-on: macos-latest
+    needs: prepare-tests
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Restore artifacts
+      - name: Restore testlists artifacts
         uses: actions/download-artifact@v4
         with:
-          name: devices-and-testlists
+          name: testlists
 
-      - name: Install Bundler
-        run: gem install bundler -v 2.5.22
-
-      - name: Install gems
-        run: bundle install
-
-      - name: Build app
+      - name: Bundle install
         run: |
-          bundle exec fastlane build
+          gem install bundler
+          bundle install
 
-      - name: Archive DerivedData
+      - name: Debug testlists location
+        run: |
+          echo "==============================="
+          echo "Listing testlists contents"
+          find . -type f
+          echo "==============================="
+
+      - name: Build for testing
+        run: bundle exec fastlane build
+
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: derived-data
-          path: |
-            DerivedData
-            devices.txt
-            testlists/*.json
+          name: DerivedData
+          path: DerivedData
 
-  run_tests:
-    name: Run Tests on matrix devices
-    runs-on: self-hosted
-    needs: build_app
+  run-tests:
+    runs-on: macos-latest
+    needs: build-app
     strategy:
       matrix:
-        device: ["iphoneFastlane15", "iphoneFastlane16"]
+        device: [iphoneFastlane15, iphoneFastlane16]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Restore build artifacts
+      - name: Restore build
         uses: actions/download-artifact@v4
         with:
-          name: derived-data
+          name: DerivedData
 
-      - name: Copy testlists to fastlane
+      - name: Restore testlists
+        uses: actions/download-artifact@v4
+        with:
+          name: testlists
+
+      - name: Debug restored files
         run: |
-          mkdir -p fastlane
-          cp testlists/*.json fastlane/
+          echo "========== CHECK FILES =========="
+          pwd
+          ls -la
+          find . -name "*.json"
+          echo "================================="
 
-      - name: List copied files
-        run: ls -la fastlane
-
-      - name: Install Bundler
-        run: gem install bundler -v 2.5.22
-
-      - name: Install gems
-        run: bundle install
+      - name: Install dependencies
+        run: |
+          gem install bundler
+          bundle install
 
       - name: Run tests
         run: |
           TEST_FILE="fastlane/${{ matrix.device }}-tests.json"
+          echo "Will look for test file: $TEST_FILE"
           if [ ! -f "$TEST_FILE" ]; then
-            echo "Test file $TEST_FILE not found!"
+            echo "❌ TEST FILE NOT FOUND: $TEST_FILE"
             exit 1
           fi
-          bundle exec fastlane test id:"${{ matrix.device }}" test_list:"$TEST_FILE" test_output:"output_dir/${{ matrix.device }}"
+          bundle exec fastlane test \
+            id:${{ matrix.device }} \
+            test_list:$TEST_FILE
 
-      - name: Archive test results
-        uses: actions/upload-artifact@v4
-        with:
-          name: xcresults-${{ matrix.device }}
-          path: |
-            output_dir/${{ matrix.device }}
-
-  generate_allure_report:
-    name: Generate Allure Report
-    runs-on: self-hosted
-    needs: run_tests
+  generate-report:
+    runs-on: macos-latest
+    needs: run-tests
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Restore results iphoneFastlane15
-        uses: actions/download-artifact@v4
-        with:
-          name: xcresults-iphoneFastlane15
-
-      - name: Restore results iphoneFastlane16
-        uses: actions/download-artifact@v4
-        with:
-          name: xcresults-iphoneFastlane16
-
-      - name: Merge results and generate Allure report
+      - name: Generate Allure Report
         run: |
-          mkdir -p allure_union
-          find output_dir -mindepth 2 -type d -exec cp -r {} allure_union \;
-          allure generate allure_union -o allure-report --clean
-
-      - name: Upload Allure Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-report
-          path: allure-report
+          echo "Generating Allure Report (placeholder step)"
