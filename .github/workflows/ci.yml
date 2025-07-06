@@ -43,6 +43,12 @@ jobs:
         with:
           name: devices-and-testlists
 
+      - name: Install Bundler
+        run: gem install bundler -v 2.5.22
+
+      - name: Install gems
+        run: bundle install
+
       - name: Build app
         run: |
           bundle exec fastlane build
@@ -72,15 +78,27 @@ jobs:
         with:
           name: derived-data
 
-      - name: Prepare testlists
+      - name: Copy testlists to fastlane
         run: |
           mkdir -p fastlane
           cp testlists/*.json fastlane/
 
+      - name: List copied files
+        run: ls -la fastlane
+
+      - name: Install Bundler
+        run: gem install bundler -v 2.5.22
+
+      - name: Install gems
+        run: bundle install
+
       - name: Run tests
         run: |
           TEST_FILE="fastlane/${{ matrix.device }}-tests.json"
-          if [ ! -f "$TEST_FILE" ]; then echo "Test file $TEST_FILE not found!"; exit 1; fi
+          if [ ! -f "$TEST_FILE" ]; then
+            echo "Test file $TEST_FILE not found!"
+            exit 1
+          fi
           bundle exec fastlane test id:"${{ matrix.device }}" test_list:"$TEST_FILE" test_output:"output_dir/${{ matrix.device }}"
 
       - name: Archive test results
