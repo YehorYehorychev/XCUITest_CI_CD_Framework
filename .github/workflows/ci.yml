@@ -1,83 +1,139 @@
-name: CI
+name: iOS XCUITest CI
 
 on:
   push:
     branches:
       - main
+      - dev
+  pull_request:
 
 jobs:
-  prepare-tests:
-    runs-on: macos-latest
+  prepare_tests:
+    name: Prepare Tests
+    runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Setup Ruby
+      - name: Prepare test distribution
         run: |
-          brew install ruby
-          gem install bundler
+          python3 orchestrator.py --devices "iphoneFastlane15,iphoneFastlane16"
+          echo "iphoneFastlane15,iphoneFastlane16" | tr ',' '\n' > devices.txt
+          mkdir -p testlists
+          mv *-tests.json testlists/
 
-      - name: Create dummy testlists
-        run: |
-          mkdir -p devices-and-testlists/testlists
-          echo '{"MyTest": "Enabled"}' > devices-and-testlists/testlists/iphoneFastlane16-tests.json
-          echo '{"MyTest": "Enabled"}' > devices-and-testlists/testlists/iphoneFastlane15-tests.json
-
-      - name: Upload artifacts
+      - name: Archive test definitions
         uses: actions/upload-artifact@v4
         with:
-          name: testlists
-          path: devices-and-testlists/testlists/*.json
+          name: devices-and-testlists
+          path: |
+            devices.txt
+            testlists/*.json
 
-  build-app:
-    runs-on: macos-latest
-    needs: prepare-tests
+  build_app:
+    name: Build App
+    runs-on: self-hosted
+    needs: prepare_tests
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Download testlists artifact
+      - name: Restore artifacts
         uses: actions/download-artifact@v4
         with:
-          name: testlists
+          name: devices-and-testlists
 
-      - name: Install dependencies
+      - name: Install Bundler
+        run: gem install bundler -v 2.5.22
+
+      - name: Install gems
         run: bundle install
 
-      - name: Build app for testing
-        run: bundle exec fastlane build
+      - name: Build app
+        run: |
+          bundle exec fastlane build
 
-      - name: Upload DerivedData
+      - name: Archive DerivedData
         uses: actions/upload-artifact@v4
         with:
           name: derived-data
-          path: DerivedData
+          path: |
+            DerivedData
+            devices.txt
+            testlists/*.json
 
-  run-tests:
-    runs-on: macos-latest
-    needs: build-app
+  run_tests:
+    name: Run Tests on matrix devices
+    runs-on: self-hosted
+    needs: build_app
     strategy:
       matrix:
-        device: [iphoneFastlane15, iphoneFastlane16]
+        device: ["iphoneFastlane15", "iphoneFastlane16"]
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Download testlists artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: testlists
-
-      - name: Download DerivedData
+      - name: Restore build artifacts
         uses: actions/download-artifact@v4
         with:
           name: derived-data
+
+      - name: Copy testlists to fastlane
+        run: |
+          mkdir -p fastlane
+          cp testlists/*.json fastlane/
+
+      - name: List copied files
+        run: ls -la fastlane
+
+      - name: Install Bundler
+        run: gem install bundler -v 2.5.22
+
+      - name: Install gems
+        run: bundle install
 
       - name: Run tests
         run: |
-          bundle exec fastlane test id:${{ matrix.device }} \
-          test_list:devices-and-testlists/testlists/${{ matrix.device }}-tests.json
+          TEST_FILE="fastlane/${{ matrix.device }}-tests.json"
+          if [ ! -f "$TEST_FILE" ]; then
+            echo "Test file $TEST_FILE not found!"
+            exit 1
+          fi
+          bundle exec fastlane test id:"${{ matrix.device }}" test_list:"$TEST_FILE" test_output:"output_dir/${{ matrix.device }}"
 
-  generate-report:
-    runs-on: macos-latest
-    needs: run-tests
+      - name: Archive test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcresults-${{ matrix.device }}
+          path: |
+            output_dir/${{ matrix.device }}
+
+  generate_allure_report:
+    name: Generate Allure Report
+    runs-on: self-hosted
+    needs: run_tests
     steps:
-      - name: Generate Allure report
-        run: echo "generate allure report placeholder"
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Restore results iphoneFastlane15
+        uses: actions/download-artifact@v4
+        with:
+          name: xcresults-iphoneFastlane15
+
+      - name: Restore results iphoneFastlane16
+        uses: actions/download-artifact@v4
+        with:
+          name: xcresults-iphoneFastlane16
+
+      - name: Merge results and generate Allure report
+        run: |
+          mkdir -p allure_union
+          find output_dir -mindepth 2 -type d -exec cp -r {} allure_union \;
+          allure generate allure_union -o allure-report --clean
+
+      - name: Upload Allure Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report
