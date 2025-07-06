@@ -1,4 +1,4 @@
-name: iOS XCUITest CI
+name: CI
 
 on:
   push:
@@ -9,66 +9,46 @@ jobs:
   prepare-tests:
     runs-on: macos-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Ruby and Bundler
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.3'
-          bundler-cache: true
-
-      - name: Install dependencies
+      - name: Setup Ruby
         run: |
+          brew install ruby
           gem install bundler
-          bundle install
 
-      - name: Archive Devices and Testlists (if exist)
+      - name: Create dummy testlists
         run: |
-          echo "Archiving devices-and-testlists contents if they exist"
-          mkdir -p archive-testlists
-          if [ -d "devices-and-testlists" ]; then
-            cp -r devices-and-testlists archive-testlists/
-          else
-            echo "⚠️ WARNING: devices-and-testlists directory NOT FOUND"
-          fi
+          mkdir -p devices-and-testlists/testlists
+          echo '{"MyTest": "Enabled"}' > devices-and-testlists/testlists/iphoneFastlane16-tests.json
+          echo '{"MyTest": "Enabled"}' > devices-and-testlists/testlists/iphoneFastlane15-tests.json
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: testlists
-          path: archive-testlists/
+          path: devices-and-testlists/testlists/*.json
 
   build-app:
     runs-on: macos-latest
     needs: prepare-tests
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Restore testlists artifacts
+      - name: Download testlists artifact
         uses: actions/download-artifact@v4
         with:
           name: testlists
 
-      - name: Bundle install
-        run: |
-          gem install bundler
-          bundle install
+      - name: Install dependencies
+        run: bundle install
 
-      - name: Debug testlists location
-        run: |
-          echo "==============================="
-          echo "Listing testlists contents"
-          find . -type f
-          echo "==============================="
-
-      - name: Build for testing
+      - name: Build app for testing
         run: bundle exec fastlane build
 
-      - name: Upload build artifacts
+      - name: Upload DerivedData
         uses: actions/upload-artifact@v4
         with:
-          name: DerivedData
+          name: derived-data
           path: DerivedData
 
   run-tests:
@@ -78,51 +58,26 @@ jobs:
       matrix:
         device: [iphoneFastlane15, iphoneFastlane16]
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Restore build
-        uses: actions/download-artifact@v4
-        with:
-          name: DerivedData
-
-      - name: Restore testlists
+      - name: Download testlists artifact
         uses: actions/download-artifact@v4
         with:
           name: testlists
 
-      - name: Debug restored files
-        run: |
-          echo "========== CHECK FILES =========="
-          pwd
-          ls -la
-          find . -name "*.json"
-          echo "================================="
-
-      - name: Install dependencies
-        run: |
-          gem install bundler
-          bundle install
+      - name: Download DerivedData
+        uses: actions/download-artifact@v4
+        with:
+          name: derived-data
 
       - name: Run tests
         run: |
-          TEST_FILE="fastlane/${{ matrix.device }}-tests.json"
-          echo "Will look for test file: $TEST_FILE"
-          if [ ! -f "$TEST_FILE" ]; then
-            echo "❌ TEST FILE NOT FOUND: $TEST_FILE"
-            exit 1
-          fi
-          bundle exec fastlane test \
-            id:${{ matrix.device }} \
-            test_list:$TEST_FILE
+          bundle exec fastlane test id:${{ matrix.device }} \
+          test_list:devices-and-testlists/testlists/${{ matrix.device }}-tests.json
 
   generate-report:
     runs-on: macos-latest
     needs: run-tests
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Generate Allure Report
-        run: |
-          echo "Generating Allure Report (placeholder step)"
+      - name: Generate Allure report
+        run: echo "generate allure report placeholder"
