@@ -19,7 +19,8 @@ jobs:
         run: |
           python3 orchestrator.py --devices "iphoneFastlane15,iphoneFastlane16"
           echo "iphoneFastlane15,iphoneFastlane16" | tr ',' '\n' > devices.txt
-          mv *-tests.json fastlane/
+          mkdir -p testlists
+          mv *-tests.json testlists/
 
       - name: Archive test definitions
         uses: actions/upload-artifact@v4
@@ -27,7 +28,7 @@ jobs:
           name: devices-and-testlists
           path: |
             devices.txt
-            fastlane/*.json
+            testlists/*.json
 
   build_app:
     name: Build App
@@ -37,14 +38,14 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Restore testlists artifacts
+      - name: Restore artifacts
         uses: actions/download-artifact@v4
         with:
           name: devices-and-testlists
 
       - name: Build app
         run: |
-          fastlane build
+          bundle exec fastlane build
 
       - name: Archive DerivedData
         uses: actions/upload-artifact@v4
@@ -53,7 +54,7 @@ jobs:
           path: |
             DerivedData
             devices.txt
-            fastlane/*.json
+            testlists/*.json
 
   run_tests:
     name: Run Tests on matrix devices
@@ -71,21 +72,16 @@ jobs:
         with:
           name: derived-data
 
-      - name: Debug: list restored files
+      - name: Prepare testlists
         run: |
-          echo "== root =="
-          ls -la
-          echo "== fastlane =="
-          ls -la fastlane
+          mkdir -p fastlane
+          cp testlists/*.json fastlane/
 
       - name: Run tests
         run: |
           TEST_FILE="fastlane/${{ matrix.device }}-tests.json"
-          if [ ! -f "$TEST_FILE" ]; then
-            echo "Test file $TEST_FILE not found!"
-            exit 1
-          fi
-          fastlane test id:"${{ matrix.device }}" test_list:"$TEST_FILE" test_output:"output_dir/${{ matrix.device }}"
+          if [ ! -f "$TEST_FILE" ]; then echo "Test file $TEST_FILE not found!"; exit 1; fi
+          bundle exec fastlane test id:"${{ matrix.device }}" test_list:"$TEST_FILE" test_output:"output_dir/${{ matrix.device }}"
 
       - name: Archive test results
         uses: actions/upload-artifact@v4
