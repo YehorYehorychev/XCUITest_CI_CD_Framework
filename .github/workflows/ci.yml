@@ -19,7 +19,6 @@ jobs:
         run: |
           python3 orchestrator.py --devices "iphoneFastlane15,iphoneFastlane16"
           echo "iphoneFastlane15,iphoneFastlane16" | tr ',' '\n' > devices.txt
-          # оставляем как есть
           mv *-tests.json fastlane/
 
       - name: Archive test definitions
@@ -38,7 +37,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Restore artifacts
+      - name: Restore testlists artifacts
         uses: actions/download-artifact@v4
         with:
           name: devices-and-testlists
@@ -53,7 +52,8 @@ jobs:
           name: derived-data
           path: |
             DerivedData
-            devices-and-testlists/**
+            devices.txt
+            fastlane/*.json
 
   run_tests:
     name: Run Tests on matrix devices
@@ -71,18 +71,20 @@ jobs:
         with:
           name: derived-data
 
-      - name: Copy testlists to fastlane
+      - name: Debug: list restored files
         run: |
-          mkdir -p fastlane
-          cp devices-and-testlists/fastlane/*.json fastlane/
-
-      - name: List copied files
-        run: ls -la fastlane
+          echo "== root =="
+          ls -la
+          echo "== fastlane =="
+          ls -la fastlane
 
       - name: Run tests
         run: |
           TEST_FILE="fastlane/${{ matrix.device }}-tests.json"
-          if [ ! -f "$TEST_FILE" ]; then echo "Test file $TEST_FILE not found!"; exit 1; fi
+          if [ ! -f "$TEST_FILE" ]; then
+            echo "Test file $TEST_FILE not found!"
+            exit 1
+          fi
           fastlane test id:"${{ matrix.device }}" test_list:"$TEST_FILE" test_output:"output_dir/${{ matrix.device }}"
 
       - name: Archive test results
